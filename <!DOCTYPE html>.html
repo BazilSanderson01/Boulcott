@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Rankings</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        .rankedMovies {
+            display: flex;
+            justify-content: center;
+            overflow-x: auto;
+            padding: 10px;
+            gap: 10px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            max-width: 100%;
+            white-space: nowrap;
+        }
+
+        .rankedMovies::-webkit-scrollbar {
+            display: none;
+        }
+
+        .movie {
+            flex: 0 0 100px;
+            max-width: 100px;
+            border-radius: 10px;
+            overflow: hidden;
+            text-align: center;
+            padding: 5px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .movie img {
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .movie:hover {
+            transform: scale(1.1);
+        }
+
+        .ranking {
+            margin-top: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .moviesUpNext {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px auto;
+        }
+
+        .upNextMovie {
+            flex: 0 0 calc(20% - 20px);
+            max-width: 120px;
+            margin: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .upNextMovie img {
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .upNextMovie:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Movie Rankings</h1>
+    <div class="rankedMovies" id="rankedMoviesContainer"></div>
+
+    <div class="category">
+        <h2>Up Next</h2>
+        <div class="moviesUpNext" id="upNextMovies"></div>
+    </div>
+
+    <script>
+        const rankedMovies = [
+            { title: "Twilight", img: "https://image.tmdb.org/t/p/original/3Gkb6jm6962ADUPaCBqzz9CTbn9.jpg", rating: 7.2 },
+            { title: "Creep", img: "https://image.tmdb.org/t/p/original/qn53D574tT0YRyLgirEFHQwGUXw.jpg", rating: 8.5 },
+            { title: "Creep 2", img: "https://image.tmdb.org/t/p/original/a0m7WciFnBqpcyH1Yi8i4tdvk0k.jpg", rating: 8.1 },
+            { title: "SuperBad", img: "https://image.tmdb.org/t/p/original/ek8e8txUyUwd2BNqj6lFEerJfbq.jpg", rating: 9.0 },
+            { title: "Heretic", img: "https://image.tmdb.org/t/p/original/fr96XzlzsONrQrGfdLMiwtQjott.jpg", rating: 6.8 },
+            { title: "Twilight: New Moon", img: "https://image.tmdb.org/t/p/original/j5jM5pq78ObAXX1WhTsb115EkLl.jpg", rating: 7.0 },
+            { title: "American Psycho", img: "https://image.tmdb.org/t/p/original/9uGHEgsiUXjCNq8wdq4r49YL8A1.jpg", rating: 9.2 },
+            { title: "The Substance", img: "https://image.tmdb.org/t/p/original/o7GFN0c1YvbnB0JmAb9aSoDDvdn.jpg", rating: 8.3 },
+            { title: "Ferris Bueller's Day Off", img: "https://image.tmdb.org/t/p/original/9LTQNCvoLsKXP0LtaKAaYVtRaQL.jpg", rating: 8.7 },
+            { title: "Bodies Bodies Bodies", img: "https://image.tmdb.org/t/p/original/hRniPlHMXODzDnzR9ZJOtQEFHuX.jpg", rating: 7.5 }
+        ];
+
+        // Sort movies by rating (highest to lowest)
+        rankedMovies.sort((a, b) => b.rating - a.rating);
+
+        const rankedMoviesContainer = document.getElementById('rankedMoviesContainer');
+        rankedMovies.forEach(movie => {
+            const movieDiv = document.createElement('div');
+            movieDiv.classList.add('movie');
+
+            const img = document.createElement('img');
+            img.src = movie.img;
+            img.alt = movie.title;
+
+            const ranking = document.createElement('div');
+            ranking.classList.add('ranking');
+            ranking.innerText = movie.rating.toFixed(1);
+
+            movieDiv.appendChild(img);
+            movieDiv.appendChild(ranking);
+            rankedMoviesContainer.appendChild(movieDiv);
+        });
+
+        const upNextMovies = [
+            { title: "Get Out", img: "https://image.tmdb.org/t/p/w500/rGfGfgL2pEPCfhIvqHXieXFn7gp.jpg", category: "Horror" },
+            { title: "The Shining", img: "https://image.tmdb.org/t/p/original/fFYAlrOudDJRYs8tvuHbUk0OGdL.jpg", category: "Horror" },
+            { title: "X", img: "https://image.tmdb.org/t/p/w500/drlfSCIlMKrEeMPhi8pqY4xGxj.jpg", category: "Horror" },
+            { title: "Smile", img: "https://image.tmdb.org/t/p/w500/aPqcQwu4VGEewPhagWNncDbJ9Xp.jpg", category: "Horror" },
+            { title: "Psycho", img: "https://image.tmdb.org/t/p/w500/81d8oyEFgj7FlxJqSDXWr8JH8kV.jpg", category: "Horror" },
+            { title: "The Thing", img: "https://image.tmdb.org/t/p/original/wr17SDewv9A4yo9FkEhXpgwjGC1.jpg", category: "Horror" },
+            { title: "Hereditary", img: "https://image.tmdb.org/t/p/w500/lHV8HHlhwNup2VbpiACtlKzaGIQ.jpg", category: "Horror" },
+            { title: "It", img: "https://image.tmdb.org/t/p/w500/9E2y5Q7WlCVNEhP5GiVTjhEhx1o.jpg", category: "Horror" },
+            { title: "His House", img: "https://image.tmdb.org/t/p/original/idh2QAy5NwBRN94ScmtWrukvOgJ.jpg", category: "Horror" },
+            { title: "Nope", img: "https://image.tmdb.org/t/p/w500/AcKVlWaNVVVFQwro3nLXqPljcYA.jpg", category: "Horror" },
+            { title: "Bird Box", img: "https://image.tmdb.org/t/p/w500/rGfGfgL2pEPCfhIvqHXieXFn7gp.jpg", category: "Horror" },
+            { title: "A Quiet Place", img: "https://image.tmdb.org/t/p/w500/nAU74GmpUk7t5iklEp3bufwDq4n.jpg", category: "Horror" },
+            { title: "Talk to Me", img: "https://image.tmdb.org/t/p/w500/1G5mt3uGUW5OWUcxcBUtHm5Zdd9.jpg", category: "Horror" },
+            { title: "Split", img: "https://image.tmdb.org/t/p/w500/bqb9WsmZmDIKxqYmBJ9lj7J6hzn.jpg", category: "Horror" },
+            { title: "Saltburn", img: "https://image.tmdb.org/t/p/original/zGTfMwG112BC66mpaveVxoWPOaB.jpg", category: "Thriller" },
+            { title: "The Lighthouse", img: "https://image.tmdb.org/t/p/w500/3nk9UoepYmv1G9oP18q6JJCeYwN.jpg", category: "Horror" },
+            { title: "The Killing of a Sacred Deer", img: "https://image.tmdb.org/t/p/original/AqMJ2bu2A4kZYpuCxvwADLpp45D.jpg", category: "Horror" },
+            { title: "Pontypool", img: "https://image.tmdb.org/t/p/original/gpldyCjpfRAC9Z8u2gnLMrVNiNW.jpg", category: "Horror" },
+
+        //Non-Horror Movies
+            { title: "Paddington Bear", img: "https://image.tmdb.org/t/p/w500/7BsvSuDQuoqhWmU2fL7W2GOcZHU.jpg", category: "Family" },
+            { title: "Jackass", img: "https://image.tmdb.org/t/p/original/lMN2OiHFBUFnuW4wPi6TEocR8nq.jpg", category: "Comedy" },
+            { title: "Now You See Me", img: "https://image.tmdb.org/t/p/original/h4LgHQtpm9si92edda5JN6g0tX4.jpg", category: "Thriller" },
+            { title: "Fight Club", img: "https://image.tmdb.org/t/p/w500/bptfVGEQuv6vDTIMVCHjJ9Dz8PX.jpg", category: "Drama" },
+            { title: "The Room", img: "https://image.tmdb.org/t/p/original/oGI3QSsY4XsmUzuNYUQBQDdjuaP.jpg", category: "Drama" },
+            { title: "Cocaine Bear", img: "https://image.tmdb.org/t/p/original/gOnmaxHo0412UVr1QM5Nekv1xPi.jpg", category: "Comedy" }, 
+            { title: "Step Brothers", img: "https://image.tmdb.org/t/p/original/jV0eDViuTRf9cmj4H0JNvbvaNbR.jpg", category: "Comedy" },
+            { title: "Inglourious Basterds", img: "https://image.tmdb.org/t/p/w500/7sfbEnaARXDDhKm0CZ7D7uc2sbo.jpg", category: "War" },
+            { title: "The Godfather", img: "https://image.tmdb.org/t/p/w500/3bhkrj58Vtu7enYsRolD1fZdja1.jpg", category: "Crime" },
+            { title: "Pulp Fiction", img: "https://image.tmdb.org/t/p/w500/plnlrtBUULT0rh3Xsjmpubiso3L.jpg", category: "Crime" },
+            { title: "Scott Pilgrim vs. The World", img: "https://image.tmdb.org/t/p/original/gseLBM6CzrwubkvGAqOsVd7FtKn.jpg", category: "Comedy" },
+            { title: "The Princess Bride", img: "https://image.tmdb.org/t/p/original/eOp2XmQpH6QYPfOVSQTSGoYABMc.jpg", category: "Fantasy" },
+            { title: "Poor Things", img: "https://image.tmdb.org/t/p/original/kCGlIMHnOm8JPXq3rXM6c5wMxcT.jpg", category: "Sci-Fi" }
+        ];
+    
+
+        const upNextMoviesContainer = document.getElementById('upNextMovies');
+        upNextMovies.forEach(movie => {
+            const upNextDiv = document.createElement('div');
+            upNextDiv.classList.add('upNextMovie');
+
+            const img = document.createElement('img');
+            img.src = movie.img;
+            img.alt = movie.title;
+
+            upNextDiv.appendChild(img);
+            upNextMoviesContainer.appendChild(upNextDiv);
+        });
+    </script>
+</body>
+</html>
